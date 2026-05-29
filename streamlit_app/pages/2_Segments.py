@@ -121,6 +121,15 @@ stats = query(f"""
     ORDER BY avg_monetary DESC
 """)
 if not stats.empty:
+    # Đổi tên cột cho dễ đọc
+    stats = stats.rename(columns={
+        'cluster_label': 'Nhóm khách hàng',
+        'so_khach': 'Số lượng khách',
+        'avg_recency': 'Recency TB (ngày)',
+        'avg_frequency': 'Frequency TB (đơn)',
+        'avg_monetary': 'Monetary TB (USD)',
+        'avg_order_value': 'Giá trị đơn TB (USD)'
+    })
     st.dataframe(stats, use_container_width=True)
 else:
     st.warning("Không có dữ liệu cho bảng thống kê.")
