@@ -21,7 +21,7 @@ user_id = st.selectbox(
     help="Bạn có thể click vào và gõ trực tiếp số ID để tìm kiếm nhanh."
 )
 
-if st.button("🔍 Xem gợi ý", type="primary"):
+if st.button("Xem gợi ý", type="primary"):
     recs = query(f"""
         SELECT
             r.rank,
