@@ -7,14 +7,53 @@ from utils.db import query
 st.set_page_config(page_title="Overview", layout="wide")
 st.title("Tổng quan kinh doanh")
 
+# --- Global Slicers (Power BI style) ---
+st.markdown("### Bộ lọc dữ liệu (Slicers)")
+with st.expander("Tùy chỉnh bộ lọc", expanded=True):
+    col_filter1, col_filter2 = st.columns(2)
+    
+    # 1. Lọc Brand
+    with col_filter1:
+        brand_list = query("""
+            SELECT brand, COUNT(*) as cnt 
+            FROM main_silver.silver_events_cleaned 
+            WHERE brand != 'Unknown' 
+            GROUP BY brand ORDER BY cnt DESC LIMIT 100
+        """)['brand'].tolist()
+        selected_brand = st.selectbox("Thương hiệu (Brand):", ["Tất cả"] + brand_list)
+
+    # 2. Lọc Category
+    with col_filter2:
+        cat_list = query("""
+            SELECT category_level1, COUNT(*) as cnt 
+            FROM main_silver.silver_events_cleaned 
+            WHERE category_level1 != 'Unknown' 
+            GROUP BY category_level1 ORDER BY cnt DESC LIMIT 50
+        """)['category_level1'].tolist()
+        selected_cat = st.selectbox("Danh mục (Category):", ["Tất cả"] + cat_list)
+
+# Xây dựng mệnh đề WHERE động dựa trên Slicers
+where_conditions = []
+if selected_brand != "Tất cả":
+    where_conditions.append(f"brand = '{selected_brand.replace(chr(39), chr(39)+chr(39))}'")
+if selected_cat != "Tất cả":
+    where_conditions.append(f"category_level1 = '{selected_cat.replace(chr(39), chr(39)+chr(39))}'")
+
+where_clause = ""
+if where_conditions:
+    where_clause = "WHERE " + " AND ".join(where_conditions)
+
+st.divider()
+
 # --- Doanh thu theo ngày ---
 st.subheader("Doanh thu theo ngày")
-daily = query("""
+daily = query(f"""
     SELECT
         event_date,
         SUM(CASE WHEN is_purchase=1 THEN price ELSE 0 END) AS revenue,
         SUM(is_purchase) AS orders
     FROM main_silver.silver_events_cleaned
+    {where_clause}
     GROUP BY event_date
     ORDER BY event_date
 """)
@@ -29,19 +68,6 @@ col1, col2 = st.columns(2)
 # --- Phễu chuyển đổi ---
 with col1:
     st.subheader("Phễu chuyển đổi")
-    
-    # Lấy danh sách Top 50 brand để filter cho nhẹ
-    brand_list = query("""
-        SELECT brand, COUNT(*) as cnt 
-        FROM main_silver.silver_events_cleaned 
-        WHERE brand != 'Unknown' 
-        GROUP BY brand ORDER BY cnt DESC LIMIT 50
-    """)['brand'].tolist()
-    
-    selected_brand = st.selectbox("Lọc phễu theo Brand:", ["Tất cả"] + brand_list)
-    
-    where_clause = f"WHERE brand = '{selected_brand.replace(chr(39), chr(39)+chr(39))}'" if selected_brand != "Tất cả" else ""
-    
     funnel_data = query(f"""
         SELECT event_type, COUNT(*) AS cnt
         FROM main_silver.silver_events_cleaned
@@ -56,11 +82,12 @@ with col1:
 # --- Top 10 brand ---
 with col2:
     st.subheader("Top 10 brand doanh thu cao nhất")
-    top_brand = query("""
+    top_brand_where = where_clause + (" AND brand != 'Unknown'" if where_clause else "WHERE brand != 'Unknown'")
+    top_brand = query(f"""
         SELECT brand,
                ROUND(SUM(CASE WHEN is_purchase=1 THEN price ELSE 0 END), 0) AS revenue
         FROM main_silver.silver_events_cleaned
-        WHERE brand != 'Unknown'
+        {top_brand_where}
         GROUP BY brand
         ORDER BY revenue DESC
         LIMIT 10
@@ -73,11 +100,12 @@ with col2:
 
 # --- Top 10 danh mục ---
 st.subheader("Top 10 danh mục theo lượt mua")
-top_cat = query("""
+top_cat_where = where_clause + (" AND category_level1 != 'Unknown'" if where_clause else "WHERE category_level1 != 'Unknown'")
+top_cat = query(f"""
     SELECT category_level1,
            SUM(is_purchase) AS purchases
     FROM main_silver.silver_events_cleaned
-    WHERE category_level1 != 'Unknown'
+    {top_cat_where}
     GROUP BY category_level1
     ORDER BY purchases DESC
     LIMIT 10
