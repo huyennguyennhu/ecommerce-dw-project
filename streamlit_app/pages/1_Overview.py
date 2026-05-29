@@ -7,6 +7,12 @@ from utils.db import query
 st.set_page_config(page_title="Overview", layout="wide")
 st.title("Tổng quan kinh doanh")
 
+def clear_filters():
+    st.session_state.ov_brand = "Tất cả"
+    st.session_state.ov_cat = "Tất cả"
+    st.session_state.seg_cluster = "Tất cả"
+    st.session_state.seg_rfm = "Tất cả"
+
 # --- Global Slicers (Power BI style) ---
 with st.sidebar:
     # 1. Lọc Brand
@@ -36,12 +42,7 @@ with st.sidebar:
     rfm_list = query("SELECT DISTINCT rfm_segment FROM main_gold.cluster_predictions")['rfm_segment'].tolist()
     selected_rfm = st.selectbox("Phân khúc RFM:", ["Tất cả"] + rfm_list, key="seg_rfm")
 
-    if st.button("Xóa bộ lọc", use_container_width=True):
-        st.session_state.ov_brand = "Tất cả"
-        st.session_state.ov_cat = "Tất cả"
-        st.session_state.seg_cluster = "Tất cả"
-        st.session_state.seg_rfm = "Tất cả"
-        st.rerun()
+    st.button("Xóa bộ lọc", on_click=clear_filters, use_container_width=True)
 
 # --- Logic Lọc Chéo (Cross-filtering) từ Cluster/RFM sang Events ---
 cross_conditions = []
