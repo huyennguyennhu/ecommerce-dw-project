@@ -29,9 +29,23 @@ col1, col2 = st.columns(2)
 # --- Phễu chuyển đổi ---
 with col1:
     st.subheader("Phễu chuyển đổi")
-    funnel_data = query("""
+    
+    # Lấy danh sách Top 50 brand để filter cho nhẹ
+    brand_list = query("""
+        SELECT brand, COUNT(*) as cnt 
+        FROM main_silver.silver_events_cleaned 
+        WHERE brand != 'Unknown' 
+        GROUP BY brand ORDER BY cnt DESC LIMIT 50
+    """)['brand'].tolist()
+    
+    selected_brand = st.selectbox("Lọc phễu theo Brand:", ["Tất cả"] + brand_list)
+    
+    where_clause = f"WHERE brand = '{selected_brand.replace(chr(39), chr(39)+chr(39))}'" if selected_brand != "Tất cả" else ""
+    
+    funnel_data = query(f"""
         SELECT event_type, COUNT(*) AS cnt
         FROM main_silver.silver_events_cleaned
+        {where_clause}
         GROUP BY event_type
         ORDER BY cnt DESC
     """)
