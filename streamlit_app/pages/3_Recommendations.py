@@ -8,21 +8,18 @@ st.title("Gợi ý sản phẩm cá nhân hóa")
 
 st.markdown("Nhập `user_id` để xem top-10 sản phẩm được gợi ý bởi mô hình ALS.")
 
-# Lấy vài user_id mẫu
-sample_users = query("""
+# Lấy danh sách toàn bộ user_id hợp lệ
+all_users = query("""
     SELECT DISTINCT user_id
     FROM main_gold.gold_recommendations
-    LIMIT 20
+    ORDER BY user_id
 """)['user_id'].tolist()
 
-col1, col2 = st.columns([2, 1])
-with col1:
-    user_input = st.text_input("Nhập user_id:", value=str(sample_users[0]))
-with col2:
-    st.markdown("<br>", unsafe_allow_html=True)
-    use_sample = st.selectbox("Hoặc chọn user mẫu:", sample_users)
-
-user_id = int(user_input) if user_input else use_sample
+user_id = st.selectbox(
+    "Chọn hoặc gõ tìm kiếm user_id:", 
+    options=all_users,
+    help="Bạn có thể click vào và gõ trực tiếp số ID để tìm kiếm nhanh."
+)
 
 if st.button("🔍 Xem gợi ý", type="primary"):
     recs = query(f"""
