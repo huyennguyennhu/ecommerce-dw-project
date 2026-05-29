@@ -9,8 +9,11 @@ st.title("Tổng quan kinh doanh")
 
 # --- Global Slicers (Power BI style) ---
 with st.sidebar:
-    st.markdown("### 📌 Bộ lọc dữ liệu")
-    
+    if st.button("Xóa bộ lọc", use_container_width=True):
+        st.session_state.ov_brand = "Tất cả"
+        st.session_state.ov_cat = "Tất cả"
+        st.rerun()
+        
     # 1. Lọc Brand
     brand_list = query("""
         SELECT brand, COUNT(*) as cnt 
@@ -18,7 +21,7 @@ with st.sidebar:
         WHERE brand != 'Unknown' 
         GROUP BY brand ORDER BY cnt DESC LIMIT 100
     """)['brand'].tolist()
-    selected_brand = st.selectbox("Thương hiệu (Brand):", ["Tất cả"] + brand_list)
+    selected_brand = st.selectbox("Thương hiệu (Brand):", ["Tất cả"] + brand_list, key="ov_brand")
 
     # 2. Lọc Category (Động: Tùy thuộc vào Brand đã chọn)
     cat_where = f"AND brand = '{selected_brand.replace(chr(39), chr(39)+chr(39))}'" if selected_brand != "Tất cả" else ""
@@ -28,7 +31,7 @@ with st.sidebar:
         WHERE category_level1 != 'Unknown' {cat_where}
         GROUP BY category_level1 ORDER BY cnt DESC LIMIT 50
     """)['category_level1'].tolist()
-    selected_cat = st.selectbox("Danh mục (Category):", ["Tất cả"] + cat_list)
+    selected_cat = st.selectbox("Danh mục (Category):", ["Tất cả"] + cat_list, key="ov_cat")
 
 # Xây dựng mệnh đề WHERE động dựa trên Slicers
 where_conditions = []

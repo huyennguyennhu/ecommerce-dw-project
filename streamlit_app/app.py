@@ -5,6 +5,16 @@ st.set_page_config(
     layout="wide"
 )
 
+# Khởi tạo trạng thái toàn cục cho các bộ lọc (Persistent Filters)
+if 'ov_brand' not in st.session_state:
+    st.session_state.ov_brand = "Tất cả"
+if 'ov_cat' not in st.session_state:
+    st.session_state.ov_cat = "Tất cả"
+if 'seg_cluster' not in st.session_state:
+    st.session_state.seg_cluster = "Tất cả"
+if 'seg_rfm' not in st.session_state:
+    st.session_state.seg_rfm = "Tất cả"
+
 def home_page():
     st.title("eCommerce Behavior Analytics")
     st.markdown("""
