@@ -10,6 +10,7 @@ def get_conn():
     token = os.getenv("MOTHERDUCK_TOKEN") or st.secrets.get("MOTHERDUCK_TOKEN", "")
     return duckdb.connect(f"md:my_db?motherduck_token={token}")
 
+@st.cache_data(ttl=3600, show_spinner=False)
 def query(sql: str):
     conn = get_conn()
     return conn.execute(sql).df()
