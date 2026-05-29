@@ -10,9 +10,12 @@ __pycache__/
 .ipynb_checkpoints/
 
 # dbt
-dbt_project/target/
-dbt_project/dbt_packages/
-dbt_project/logs/
+target/
+dbt_packages/
+logs/
+dbt_project/ecommerce_dw/target/
+dbt_project/ecommerce_dw/dbt_packages/
+dbt_project/ecommerce_dw/logs/
 
 # Python
 venv/

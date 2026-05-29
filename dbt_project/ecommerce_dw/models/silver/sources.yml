@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: main
+    tables:
+      - name: bronze_events_raw
+        description: "Dữ liệu thô từ Kaggle CSV"
+        columns:
+          - name: user_id
+            tests: [not_null]
+          - name: product_id
+            tests: [not_null]
+          - name: event_type
+            tests:
+              - accepted_values:
+                  values: ['view', 'cart', 'purchase']

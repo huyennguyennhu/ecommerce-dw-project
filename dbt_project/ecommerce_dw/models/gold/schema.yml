@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Dimension bảng thời gian"
+    columns:
+      - name: date_id
+        tests: [not_null, unique]
+
+  - name: dim_product
+    description: "Dimension bảng sản phẩm"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: dim_user
+    description: "Dimension bảng người dùng"
+    columns:
+      - name: user_id
+        tests: [not_null, unique]
+
+  - name: fact_events
+    description: "Fact table toàn bộ sự kiện"
+    columns:
+      - name: event_sk
+        tests: [not_null]
+      - name: user_id
+        tests: [not_null]
+      - name: product_id
+        tests: [not_null]
+
+  - name: fact_purchases
+    description: "Fact table chỉ giao dịch mua hàng"
+    columns:
+      - name: purchase_sk
+        tests: [not_null]
+
+  - name: gold_customer_features
+    description: "Bảng phẳng RFM + features cho AI/ML"
+    columns:
+      - name: user_id
+        tests: [not_null, unique]

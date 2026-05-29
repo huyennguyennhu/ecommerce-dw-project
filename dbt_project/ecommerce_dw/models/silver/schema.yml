@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: silver_events_cleaned
+    description: "Dữ liệu sự kiện đã làm sạch, loại bot, loại duplicate"
+    columns:
+      - name: event_time
+        tests: [not_null]
+      - name: event_type
+        tests:
+          - accepted_values:
+              values: ['view', 'cart', 'purchase']
+      - name: user_id
+        tests: [not_null]
+      - name: product_id
+        tests: [not_null]
+      - name: price
+        tests: [not_null]
+
+  - name: silver_products
+    description: "Thống kê theo sản phẩm"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: silver_users
+    description: "Thống kê hành vi theo người dùng"
+    columns:
+      - name: user_id
+        tests: [not_null, unique]
