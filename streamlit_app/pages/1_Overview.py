@@ -8,30 +8,27 @@ st.set_page_config(page_title="Overview", layout="wide")
 st.title("Tổng quan kinh doanh")
 
 # --- Global Slicers (Power BI style) ---
-st.markdown("### Bộ lọc dữ liệu (Slicers)")
-with st.expander("Tùy chỉnh bộ lọc", expanded=True):
-    col_filter1, col_filter2 = st.columns(2)
+with st.sidebar:
+    st.markdown("### 📌 Bộ lọc dữ liệu")
     
     # 1. Lọc Brand
-    with col_filter1:
-        brand_list = query("""
-            SELECT brand, COUNT(*) as cnt 
-            FROM main_silver.silver_events_cleaned 
-            WHERE brand != 'Unknown' 
-            GROUP BY brand ORDER BY cnt DESC LIMIT 100
-        """)['brand'].tolist()
-        selected_brand = st.selectbox("Thương hiệu (Brand):", ["Tất cả"] + brand_list)
+    brand_list = query("""
+        SELECT brand, COUNT(*) as cnt 
+        FROM main_silver.silver_events_cleaned 
+        WHERE brand != 'Unknown' 
+        GROUP BY brand ORDER BY cnt DESC LIMIT 100
+    """)['brand'].tolist()
+    selected_brand = st.selectbox("Thương hiệu (Brand):", ["Tất cả"] + brand_list)
 
     # 2. Lọc Category (Động: Tùy thuộc vào Brand đã chọn)
-    with col_filter2:
-        cat_where = f"AND brand = '{selected_brand.replace(chr(39), chr(39)+chr(39))}'" if selected_brand != "Tất cả" else ""
-        cat_list = query(f"""
-            SELECT category_level1, COUNT(*) as cnt 
-            FROM main_silver.silver_events_cleaned 
-            WHERE category_level1 != 'Unknown' {cat_where}
-            GROUP BY category_level1 ORDER BY cnt DESC LIMIT 50
-        """)['category_level1'].tolist()
-        selected_cat = st.selectbox("Danh mục (Category):", ["Tất cả"] + cat_list)
+    cat_where = f"AND brand = '{selected_brand.replace(chr(39), chr(39)+chr(39))}'" if selected_brand != "Tất cả" else ""
+    cat_list = query(f"""
+        SELECT category_level1, COUNT(*) as cnt 
+        FROM main_silver.silver_events_cleaned 
+        WHERE category_level1 != 'Unknown' {cat_where}
+        GROUP BY category_level1 ORDER BY cnt DESC LIMIT 50
+    """)['category_level1'].tolist()
+    selected_cat = st.selectbox("Danh mục (Category):", ["Tất cả"] + cat_list)
 
 # Xây dựng mệnh đề WHERE động dựa trên Slicers
 where_conditions = []
