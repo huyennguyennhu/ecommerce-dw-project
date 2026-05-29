@@ -4,8 +4,8 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.db import query
 
-st.set_page_config(page_title="Overview", page_icon="📊", layout="wide")
-st.title("📊 Tổng quan kinh doanh")
+st.set_page_config(page_title="Overview", layout="wide")
+st.title("Tổng quan kinh doanh")
 
 # --- Doanh thu theo ngày ---
 st.subheader("Doanh thu theo ngày")

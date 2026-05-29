@@ -3,8 +3,8 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.db import query
 
-st.set_page_config(page_title="Recommendations", page_icon="🎯", layout="wide")
-st.title("🎯 Gợi ý sản phẩm cá nhân hóa")
+st.set_page_config(page_title="Recommendations", layout="wide")
+st.title("Gợi ý sản phẩm cá nhân hóa")
 
 st.markdown("Nhập `user_id` để xem top-10 sản phẩm được gợi ý bởi mô hình ALS.")
 
@@ -53,4 +53,4 @@ if st.button("🔍 Xem gợi ý", type="primary"):
             WHERE user_id = {user_id}
         """)
         if len(seg) > 0:
-            st.info(f"📌 Phân khúc: **{seg.iloc[0]['cluster_label']}** | RFM: {seg.iloc[0]['rfm_segment']}")
+            st.info(f"Phân khúc: **{seg.iloc[0]['cluster_label']}** | RFM: {seg.iloc[0]['rfm_segment']}")

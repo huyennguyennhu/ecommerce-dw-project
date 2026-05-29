@@ -2,20 +2,19 @@ import streamlit as st
 
 st.set_page_config(
     page_title="eCommerce Analytics",
-    page_icon="🛒",
     layout="wide"
 )
 
 def home_page():
-    st.title("🛒 eCommerce Behavior Analytics")
+    st.title("eCommerce Behavior Analytics")
     st.markdown("""
     Hệ thống phân tích hành vi **67 triệu sự kiện** từ sàn thương mại điện tử (Nov 2019).
     
     Điều hướng qua menu bên trái:
-    - 📊 **Tổng quan** — Doanh thu, phễu chuyển đổi, top sản phẩm
-    - 👥 **Phân khúc** — Phân khúc khách hàng RFM + Clustering
-    - 🎯 **Gợi ý sản phẩm** — Gợi ý sản phẩm cá nhân hóa
-    - 🤖 **Trợ lý AI** — Hỏi đáp kinh doanh bằng AI
+    - **Tổng quan** — Doanh thu, phễu chuyển đổi, top sản phẩm
+    - **Phân khúc** — Phân khúc khách hàng RFM + Clustering
+    - **Gợi ý sản phẩm** — Gợi ý sản phẩm cá nhân hóa
+    - **Trợ lý AI** — Hỏi đáp kinh doanh bằng AI
     """)
     
     st.divider()
@@ -33,19 +32,19 @@ def home_page():
         """).iloc[0]
     
         c1, c2, c3, c4 = st.columns(4)
-        c1.metric("👤 Người dùng",      f"{int(kpis.total_users):,}")
-        c2.metric("🛍 Đơn hàng",        f"{int(kpis.total_purchases):,}")
-        c3.metric("💰 Doanh thu (USD)", f"${kpis.total_revenue:,.0f}")
-        c4.metric("📈 Tỷ lệ chuyển đổi", f"{kpis.conversion_rate}%")
+        c1.metric("Người dùng",      f"{int(kpis.total_users):,}")
+        c2.metric("Đơn hàng",        f"{int(kpis.total_purchases):,}")
+        c3.metric("Doanh thu (USD)", f"${kpis.total_revenue:,.0f}")
+        c4.metric("Tỷ lệ chuyển đổi", f"{kpis.conversion_rate}%")
     except Exception as e:
         st.error(f"Lỗi kết nối: {e}")
 
 pg = st.navigation([
-    st.Page(home_page, title="Trang chủ", icon="🏠"),
-    st.Page("pages/1_Overview.py", title="Tổng quan", icon="📊"),
-    st.Page("pages/2_Segments.py", title="Phân khúc", icon="👥"),
-    st.Page("pages/3_Recommendations.py", title="Gợi ý sản phẩm", icon="🎯"),
-    st.Page("pages/4_GenBI.py", title="Trợ lý AI", icon="🤖"),
+    st.Page(home_page, title="Trang chủ"),
+    st.Page("pages/1_Overview.py", title="Tổng quan"),
+    st.Page("pages/2_Segments.py", title="Phân khúc"),
+    st.Page("pages/3_Recommendations.py", title="Gợi ý sản phẩm"),
+    st.Page("pages/4_GenBI.py", title="Trợ lý AI"),
 ])
 
 pg.run()

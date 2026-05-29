@@ -4,8 +4,8 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.db import query
 
-st.set_page_config(page_title="Customer Segments", page_icon="👥", layout="wide")
-st.title("👥 Phân khúc khách hàng")
+st.set_page_config(page_title="Customer Segments", layout="wide")
+st.title("Phân khúc khách hàng")
 
 # --- Phân bố cụm ---
 col1, col2 = st.columns(2)

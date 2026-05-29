@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-st.set_page_config(page_title="GenBI", page_icon="🤖", layout="wide")
-st.title("🤖 GenBI — Hỏi đáp kinh doanh bằng AI")
+st.set_page_config(page_title="GenBI", layout="wide")
+st.title("GenBI — Hỏi đáp kinh doanh bằng AI")
 st.markdown("Đặt câu hỏi bằng tiếng Việt, AI sẽ trả lời dựa trên dữ liệu thực tế.")
 
 # Lấy context dữ liệu thực
@@ -53,19 +53,19 @@ SYSTEM_PROMPT = f"""
 Bạn là chuyên gia phân tích kinh doanh thương mại điện tử. 
 Dưới đây là dữ liệu THỰC TẾ từ hệ thống (tháng 11/2019):
 
-📊 KPIs TỔNG QUAN:
+KPIs TỔNG QUAN:
 - Tổng doanh thu: ${kpi['revenue']:,.0f} USD
 - Tổng người dùng: {kpi['users']:,}
 - Tổng đơn hàng: {kpi['orders']:,}
 - Giá trị đơn trung bình (AOV): ${kpi['aov']:,.2f} USD
 
-🏆 TOP 5 BRAND DOANH THU:
+TOP 5 BRAND DOANH THU:
 {chr(10).join([f"- {b['brand']}: ${b['rev']:,.0f}" for b in top_brands])}
 
-📦 TOP 5 DANH MỤC MUA NHIỀU:
+TOP 5 DANH MỤC MUA NHIỀU:
 {chr(10).join([f"- {c['category_level1']}: {c['purchases']:,} đơn" for c in top_cats])}
 
-👥 PHÂN KHÚC KHÁCH HÀNG:
+PHÂN KHÚC KHÁCH HÀNG:
 {chr(10).join([f"- {s['cluster_label']}: {s['cnt']:,} người" for s in segments])}
 
 Hãy:
@@ -76,7 +76,7 @@ Hãy:
 """
 
 # Gợi ý câu hỏi mẫu
-st.markdown("**💡 Câu hỏi gợi ý:**")
+st.markdown("**Câu hỏi gợi ý:**")
 sample_qs = [
     "Brand nào đang dẫn đầu doanh thu và tại sao?",
     "Làm thế nào để tăng tỷ lệ chuyển đổi từ cart sang purchase?",
@@ -120,11 +120,11 @@ if prompt:
         )
         reply = response.choices[0].message.content
     except Exception as e:
-        reply = f"❌ Lỗi kết nối Groq API: {e}"
+        reply = f"Lỗi kết nối Groq API: {e}"
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
     st.chat_message("assistant").write(reply)
 
-    if st.button("🗑 Xóa lịch sử chat"):
+    if st.button("Xóa lịch sử chat"):
         st.session_state.messages = []
         st.rerun()
