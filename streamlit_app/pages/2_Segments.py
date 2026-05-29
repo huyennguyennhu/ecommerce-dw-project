@@ -34,7 +34,7 @@ if where_conditions:
 st.divider()
 
 # Biến caption dùng chung
-filter_caption = f"📌 Đang lọc dữ liệu cho: Nhóm = **{selected_cluster}** | RFM = **{selected_rfm}**"
+filter_caption = f"Nhóm = **{selected_cluster}** | RFM = **{selected_rfm}**"
 
 # --- Phân bố cụm ---
 col1, col2 = st.columns(2)

@@ -47,7 +47,7 @@ if where_conditions:
 st.divider()
 
 # Biến caption dùng chung cho tất cả biểu đồ
-filter_caption = f"📌 Đang lọc dữ liệu cho: Brand = **{selected_brand}** | Category = **{selected_cat}**"
+filter_caption = f"Brand = **{selected_brand}** | Category = **{selected_cat}**"
 
 # --- Doanh thu theo ngày ---
 st.subheader("Doanh thu theo ngày")
