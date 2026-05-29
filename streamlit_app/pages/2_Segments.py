@@ -33,11 +33,15 @@ if where_conditions:
 
 st.divider()
 
+# Biến caption dùng chung
+filter_caption = f"📌 Đang lọc dữ liệu cho: Nhóm = **{selected_cluster}** | RFM = **{selected_rfm}**"
+
 # --- Phân bố cụm ---
 col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("Phân bố theo cụm K-Means")
+    st.caption(filter_caption)
     cluster_dist = query(f"""
         SELECT c.cluster_label, COUNT(*) AS cnt
         FROM main_gold.cluster_predictions c
@@ -54,6 +58,7 @@ with col1:
 
 with col2:
     st.subheader("Phân bố theo RFM Segment")
+    st.caption(filter_caption)
     rfm_dist = query(f"""
         SELECT c.rfm_segment, COUNT(*) AS cnt
         FROM main_gold.cluster_predictions c
@@ -71,6 +76,7 @@ with col2:
 
 # --- Scatter RFM ---
 st.subheader("RFM Scatter — Recency vs Monetary")
+st.caption(filter_caption)
 scatter_data = query(f"""
     SELECT
         f.user_id,
@@ -99,6 +105,7 @@ else:
 
 # --- Bảng thống kê ---
 st.subheader("Thống kê trung bình từng cụm")
+st.caption(filter_caption)
 stats = query(f"""
     SELECT
         c.cluster_label,
