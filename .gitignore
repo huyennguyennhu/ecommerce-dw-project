@@ -1,0 +1,19 @@
+# Data files (quá lớn, không commit)
+*.csv
+*.parquet
+*.duckdb
+
+# Environment
+.env
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# Python
+venv/
+.venv/

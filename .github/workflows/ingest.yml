@@ -1,0 +1,29 @@
+name: Daily Data Ingestion
+
+on:
+  schedule:
+    - cron: '0 17 * * *'  # 0h GMT+7 = 17h UTC hôm trước
+  workflow_dispatch:       # Cho phép chạy thủ công
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install duckdb pandas python-dotenv
+
+      - name: Run ingestion script
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: python ingestion/ingest.py
