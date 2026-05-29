@@ -91,18 +91,29 @@ for i, q in enumerate(sample_qs):
 
 st.divider()
 
-# Chat interface
+# Giao diện Chat
+col_chat1, col_chat2 = st.columns([8, 1])
+with col_chat1:
+    st.markdown("### Lịch sử trò chuyện")
+with col_chat2:
+    if st.button("Xóa chat", type="secondary", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
-# Xử lý câu hỏi tự động từ nút gợi ý
+# LUÔN render st.chat_input để thanh nhập không bao giờ biến mất
+user_input = st.chat_input("Nhập câu hỏi của bạn...")
+
+prompt = None
 if 'auto_question' in st.session_state:
     prompt = st.session_state.pop('auto_question')
-else:
-    prompt = st.chat_input("Nhập câu hỏi của bạn...")
+elif user_input:
+    prompt = user_input
 
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -124,7 +135,3 @@ if prompt:
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
     st.chat_message("assistant").write(reply)
-
-    if st.button("Xóa lịch sử chat"):
-        st.session_state.messages = []
-        st.rerun()
