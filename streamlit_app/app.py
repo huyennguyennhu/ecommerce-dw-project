@@ -11,10 +11,10 @@ st.markdown("""
 Hệ thống phân tích hành vi **67 triệu sự kiện** từ sàn thương mại điện tử (Nov 2019).
 
 Điều hướng qua menu bên trái:
-- 📊 **Overview** — Doanh thu, phễu chuyển đổi, top sản phẩm
-- 👥 **Segments** — Phân khúc khách hàng RFM + Clustering
-- 🎯 **Recommendations** — Gợi ý sản phẩm cá nhân hóa
-- 🤖 **GenBI** — Hỏi đáp kinh doanh bằng AI
+- 📊 **Tổng quan** — Doanh thu, phễu chuyển đổi, top sản phẩm
+- 👥 **Phân khúc** — Phân khúc khách hàng RFM + Clustering
+- 🎯 **Gợi ý sản phẩm** — Gợi ý sản phẩm cá nhân hóa
+- 🤖 **Trợ lý AI** — Hỏi đáp kinh doanh bằng AI
 """)
 
 st.divider()
