@@ -9,16 +9,16 @@ st.title("Phân khúc khách hàng")
 
 # --- Global Slicers (Power BI style) ---
 with st.sidebar:
-    if st.button("Xóa bộ lọc", use_container_width=True):
-        st.session_state.seg_cluster = "Tất cả"
-        st.session_state.seg_rfm = "Tất cả"
-        st.rerun()
-        
     cluster_list = query("SELECT DISTINCT cluster_label FROM main_gold.cluster_predictions")['cluster_label'].tolist()
     selected_cluster = st.selectbox("Nhóm khách hàng (Cluster):", ["Tất cả"] + cluster_list, key="seg_cluster")
 
     rfm_list = query("SELECT DISTINCT rfm_segment FROM main_gold.cluster_predictions")['rfm_segment'].tolist()
     selected_rfm = st.selectbox("Phân khúc RFM:", ["Tất cả"] + rfm_list, key="seg_rfm")
+
+    if st.button("Xóa bộ lọc", use_container_width=True):
+        st.session_state.seg_cluster = "Tất cả"
+        st.session_state.seg_rfm = "Tất cả"
+        st.rerun()
 
 # Xây dựng mệnh đề WHERE động
 where_conditions = []
